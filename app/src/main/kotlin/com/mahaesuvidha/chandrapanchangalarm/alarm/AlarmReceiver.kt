@@ -5,10 +5,13 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.app.PendingIntent
 import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import com.mahaesuvidha.chandrapanchangalarm.model.BirthProfileStore
+import com.mahaesuvidha.chandrapanchangalarm.model.NakshatraGuidanceCalculator
 
 class AlarmReceiver : BroadcastReceiver() {
 
@@ -57,18 +60,23 @@ class AlarmReceiver : BroadcastReceiver() {
                 .apply()
         }
 
-        showNotification(
-            context,
-            title,
-            message,
-            id,
-            soundResource
-        )
+        val isGuidanceNotification = id == 2 || id == 121 || id == 122
+        if (isGuidanceNotification) {
+            showNakshatraGuidanceNotification(context, id, soundResource)
+        } else {
+            showNotification(
+                context,
+                title,
+                message,
+                id,
+                soundResource
+            )
+        }
 
         // The next astronomical alarm must be calculated again after
         // a real alarm fires, but this calculation is intentionally NOT
         // performed on the BroadcastReceiver thread.
-        if (id in 1..3 || id in 11..13 || id in 21..27) {
+        if (id in 1..3 || id in 11..13 || id in 21..27 || id == 121 || id == 122) {
             val pendingResult = goAsync()
             val appContext = context.applicationContext
 
@@ -86,6 +94,75 @@ class AlarmReceiver : BroadcastReceiver() {
                 }
             }.start()
         }
+    }
+
+    private fun showNakshatraGuidanceNotification(
+        context: Context,
+        id: Int,
+        soundResource: String
+    ) {
+        val profile = BirthProfileStore.load(context.applicationContext) ?: return
+        if (profile.birthNakshatra.isBlank()) return
+
+        val guidance = runCatching {
+            NakshatraGuidanceCalculator.currentGuidance(profile.birthNakshatra)
+        }.getOrNull() ?: return
+
+        val title = "🌙 नक्षत्र मार्गदर्शन — ${guidance.nakshatra}"
+        val taraLine = "तारा: ${guidance.tara.marathi}"
+        val text = "${taraLine}\n\nकाय करावे: ${guidance.doText}\n\nकाय टाळावे: ${guidance.avoidText}"
+        val bigText = NotificationCompat.BigTextStyle()
+            .bigText(text)
+            .setBigContentTitle(title)
+            .setSummaryText("जन्म नक्षत्र: ${profile.birthNakshatra}")
+
+        val channelId = "life_alarm_nakshatra_guidance_v3"
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        val soundUri = Uri.parse(
+            "android.resource://${context.packageName}/raw/$soundResource"
+        )
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val audioAttributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_ALARM)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build()
+            val channel = NotificationChannel(
+                channelId,
+                "नक्षत्र मार्गदर्शन",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            channel.description = "चालू नक्षत्र, तारा, काय करावे आणि काय टाळावे"
+            channel.enableVibration(true)
+            channel.setSound(soundUri, audioAttributes)
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val openIntent = Intent(context, com.mahaesuvidha.chandrapanchangalarm.MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+        val contentPendingIntent = PendingIntent.getActivity(
+            context,
+            7000 + id,
+            openIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val notification = NotificationCompat.Builder(context, channelId)
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setContentTitle(title)
+            .setContentText("$taraLine • जन्म नक्षत्र: ${profile.birthNakshatra}")
+            .setStyle(bigText)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .setAutoCancel(true)
+            .setContentIntent(contentPendingIntent)
+            .setSound(soundUri)
+            .build()
+
+        notificationManager.notify(7000 + id, notification)
     }
 
     private fun showNotification(

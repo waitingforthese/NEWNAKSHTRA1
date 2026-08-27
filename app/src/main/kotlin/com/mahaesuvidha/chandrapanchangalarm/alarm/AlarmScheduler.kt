@@ -10,6 +10,8 @@ import android.provider.Settings
 import com.mahaesuvidha.chandrapanchangalarm.model.LiveMoonCalculator
 import com.mahaesuvidha.chandrapanchangalarm.model.LiveSunCalculator
 import com.mahaesuvidha.chandrapanchangalarm.model.LivePanchangCalculator
+import com.mahaesuvidha.chandrapanchangalarm.model.BirthProfileStore
+import com.mahaesuvidha.chandrapanchangalarm.model.NakshatraGuidanceCalculator
 import com.mahaesuvidha.chandrapanchangalarm.settings.AlarmPrefs
 import com.mahaesuvidha.chandrapanchangalarm.settings.LocationPrefs
 
@@ -103,6 +105,11 @@ class AlarmScheduler(
 
         val prefs = AlarmPrefs(context)
         val location = LocationPrefs(context)
+
+        // Personalized Nakshatra Guidance: the change notification and the
+        // 3-hour reminder use the same live Nakshatra/Tara-Bala calculation
+        // and the same Do/Avoid text shown on the Guidance card.
+        scheduleNakshatraGuidanceAlarms()
 
         // IMPORTANT: do not call cancelAll() here. scheduleAll() can be
         // triggered by GPS updates, boot and an alarm firing. Cancelling
@@ -245,6 +252,52 @@ class AlarmScheduler(
             )
         } else {
             cancel(21); cancel(22); cancel(23); cancel(24); cancel(26); cancel(27)
+        }
+    }
+
+    private fun scheduleNakshatraGuidanceAlarms() {
+        val profile = BirthProfileStore.load(context.applicationContext)
+        if (profile == null || profile.birthNakshatra.isBlank()) {
+            cancel(121)
+            cancel(122)
+            return
+        }
+
+        val moon = LiveMoonCalculator.getCurrentMoonState()
+
+        // If the existing Moon-Nakshatra alarm is enabled, turn that same
+        // event into the personalized guidance notification in AlarmReceiver.
+        // Otherwise use the dedicated guidance-change alarm. This prevents
+        // duplicate notifications for the same Nakshatra transition.
+        if (AlarmPrefs(context).moonNakshatra) {
+            cancel(121)
+        } else {
+            reconcile(
+                id = 121,
+                enabled = true,
+                at = moon.nextNakshatraMillis,
+                title = "🌙 नक्षत्र मार्गदर्शन",
+                message = "सध्याचे नक्षत्र व तारा मार्गदर्शन पाहा.",
+                soundResource = "nakshatra"
+            )
+        }
+
+        // Personalized guidance reminder every 3 hours. Keep an existing
+        // future reminder untouched so unrelated refreshes/location updates
+        // do not reset the 3-hour interval. After delivery, AlarmReceiver
+        // calls scheduleAll() and a fresh 3-hour reminder is created.
+        val reminderAlreadyScheduled =
+            scheduledPrefs.getString("event_122", null) != null && isAlarmScheduled(122)
+        if (!reminderAlreadyScheduled) {
+            val nextReminder = System.currentTimeMillis() + 3L * 60L * 60L * 1000L
+            reconcile(
+                id = 122,
+                enabled = true,
+                at = nextReminder,
+                title = "🌙 चालू नक्षत्र मार्गदर्शन",
+                message = "सध्याचे नक्षत्र, तारा, काय करावे आणि काय टाळावे पाहा.",
+                soundResource = "nakshatra"
+            )
         }
     }
 
@@ -462,6 +515,8 @@ class AlarmScheduler(
         cancel(103)
         cancel(104)
         cancel(105)
+        cancel(121)
+        cancel(122)
 
         for (id in 201..206) {
             cancel(id)

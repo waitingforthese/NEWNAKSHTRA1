@@ -10,6 +10,7 @@ import android.os.PowerManager
 import android.provider.Settings
 
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 
@@ -245,11 +246,17 @@ private fun AppRoot(
         BirthLoginScreen { newProfile ->
             BirthProfileStore.save(context.applicationContext, newProfile)
             profile = newProfile
+            Thread {
+                runCatching { AlarmScheduler(context.applicationContext).scheduleAll() }
+            }.start()
         }
     } else {
         ChandraSuryaHome(
             profile = profile!!,
             onLogout = {
+                // Remove all alarms tied to the old birth profile before logout
+                // so the next person's guidance can never use the previous profile.
+                runCatching { AlarmScheduler(context.applicationContext).cancelAll() }
                 BirthProfileStore.clear(context.applicationContext)
                 profile = null
             },
@@ -842,6 +849,7 @@ private fun ChandraSuryaHomeContent(
     var showBadTara by remember { mutableStateOf(false) }
 
     if (showBadTara) {
+        BackHandler { showBadTara = false }
         UpcomingBadTaraScreen(
             birthNakshatra = profile.birthNakshatra,
             onBack = { showBadTara = false }
@@ -850,6 +858,7 @@ private fun ChandraSuryaHomeContent(
     }
 
     if (showGuidance) {
+        BackHandler { showGuidance = false }
         NakshatraGuidanceScreen(
             birthNakshatra = profile.birthNakshatra,
             onBack = { showGuidance = false }
@@ -2343,6 +2352,7 @@ private fun NakshatraGuidanceScreen(
     birthNakshatra: String,
     onBack: () -> Unit
 ) {
+    BackHandler(onBack = onBack)
     val now = System.currentTimeMillis()
     val current = remember(birthNakshatra) { NakshatraGuidanceCalculator.currentGuidance(birthNakshatra, now) }
     val upcoming = remember(birthNakshatra) { NakshatraGuidanceCalculator.upcomingGuidance(birthNakshatra, 60, now) }
@@ -2410,12 +2420,12 @@ private fun NakshatraGuidanceScreen(
         }
     }
 }
-
-@Composable
+\n@Composable
 private fun UpcomingBadTaraScreen(
     birthNakshatra: String,
     onBack: () -> Unit
 ) {
+    BackHandler(onBack = onBack)
     val now = System.currentTimeMillis()
     val upcoming = remember(birthNakshatra) {
         NakshatraGuidanceCalculator.upcomingGuidance(birthNakshatra, 60, now)
