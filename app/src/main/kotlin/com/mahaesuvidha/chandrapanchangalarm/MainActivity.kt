@@ -2337,7 +2337,81 @@ private fun PanchangRow(
 // SETTINGS DIALOG
 // ==========================================================
 
-\n@Composable\nprivate fun NakshatraGuidanceScreen(\n    birthNakshatra: String,\n    onBack: () -> Unit\n) {\n    val now = System.currentTimeMillis()\n    val current = remember(birthNakshatra) { NakshatraGuidanceCalculator.currentGuidance(birthNakshatra, now) }\n    val upcoming = remember(birthNakshatra) { NakshatraGuidanceCalculator.upcomingGuidance(birthNakshatra, 60, now) }\n    val warning = Color(0xFFE53935)\n    val bg = Color(0xFF07111F)\n    val card = Color(0xFF10253A)\n    val white = Color(0xFFF5F7FA)\n\n    Column(Modifier.fillMaxSize().background(bg).statusBarsPadding().navigationBarsPadding().verticalScroll(rememberScrollState()).padding(12.dp)) {\n        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {\n            TextButton(onClick = onBack) { Text("← मागे", color = white) }\n            Text("नक्षत्र मार्गदर्शन", color = white, fontSize = 21.sp, fontWeight = FontWeight.Bold)\n        }\n\n        Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = card), shape = RoundedCornerShape(14.dp)) {\n            Column(Modifier.padding(14.dp)) {\n                Text("जन्म नक्षत्र", color = Color.LightGray, fontSize = 13.sp)\n                Text(if (birthNakshatra.isBlank()) "—" else birthNakshatra, color = Color(0xFF4DA3FF), fontSize = 23.sp, fontWeight = FontWeight.Bold)\n            }\n        }\n        Spacer(Modifier.height(10.dp))\n\n        Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = card), shape = RoundedCornerShape(14.dp)) {\n            Column(Modifier.padding(14.dp)) {\n                Text("🌙 सध्या चालू असलेले नक्षत्र", color = white, fontSize = 17.sp, fontWeight = FontWeight.Bold)\n                Text(current.nakshatra, color = if (current.tara.isWarning) warning else white, fontSize = 22.sp, fontWeight = FontWeight.Bold)\n                Text("तारा: ${current.tara.marathi}", color = if (current.tara.isWarning) warning else Color(0xFFFFC83D), fontSize = 18.sp, fontWeight = FontWeight.Bold)\n                Text("सुरुवात: ${NakshatraGuidanceCalculator.format(current.startMillis)}", color = Color.LightGray, fontSize = 12.sp)\n                Text("समाप्ती: ${NakshatraGuidanceCalculator.format(current.endMillis)}", color = Color.LightGray, fontSize = 12.sp)\n                Spacer(Modifier.height(8.dp))\n                Text("काय करावे", color = white, fontWeight = FontWeight.Bold)\n                Text(current.doText, color = Color(0xFFB9E6FF), fontSize = 13.sp)\n                Spacer(Modifier.height(6.dp))\n                Text("काय टाळावे", color = white, fontWeight = FontWeight.Bold)\n                Text(current.avoidText, color = if (current.tara.isWarning) warning else Color(0xFFFFC0C0), fontSize = 13.sp, fontWeight = if (current.tara.isWarning) FontWeight.Bold else FontWeight.Normal)\n            }\n        }\n\n        Spacer(Modifier.height(14.dp))\n        Text("📅 पुढील 60 दिवसांचे नक्षत्र", color = white, fontSize = 18.sp, fontWeight = FontWeight.Bold)\n        Spacer(Modifier.height(6.dp))\n        upcoming.forEach { item ->\n            Card(Modifier.fillMaxWidth().padding(vertical = 3.dp), colors = CardDefaults.cardColors(containerColor = card), shape = RoundedCornerShape(10.dp)) {\n                Column(Modifier.padding(11.dp)) {\n                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {\n                        Text(item.nakshatra, color = if (item.tara.isWarning) warning else white, fontWeight = FontWeight.Bold, fontSize = 15.sp)\n                        Text(item.tara.marathi + if (item.tara.isWarning) " 🔴" else "", color = if (item.tara.isWarning) warning else Color(0xFFFFC83D), fontWeight = FontWeight.Bold)\n                    }\n                    Text("${NakshatraGuidanceCalculator.format(item.startMillis)}  →  ${NakshatraGuidanceCalculator.format(item.endMillis)}", color = Color.LightGray, fontSize = 11.sp)\n                }\n            }\n        }\n\n        Spacer(Modifier.height(14.dp))\n        Text("🔴 विपत / प्रत्यारी / वध — आगामी", color = warning, fontSize = 18.sp, fontWeight = FontWeight.Bold)\n        upcoming.filter { it.tara.isWarning }.forEach { item ->\n            Card(Modifier.fillMaxWidth().padding(vertical = 3.dp), colors = CardDefaults.cardColors(containerColor = Color(0xFF35151A)), shape = RoundedCornerShape(10.dp)) {\n                Column(Modifier.padding(11.dp)) {\n                    Text("${item.tara.marathi} — ${item.nakshatra}", color = warning, fontWeight = FontWeight.Bold, fontSize = 16.sp)\n                    Text("${NakshatraGuidanceCalculator.format(item.startMillis)}  →  ${NakshatraGuidanceCalculator.format(item.endMillis)}", color = white, fontSize = 12.sp)\n                    Spacer(Modifier.height(4.dp))\n                    Text("काय टाळावे: ${item.avoidText}", color = warning, fontSize = 12.sp)\n                }\n            }\n        }\n    }\n}\n\n@Composable
+
+@Composable
+private fun NakshatraGuidanceScreen(
+    birthNakshatra: String,
+    onBack: () -> Unit
+) {
+    val now = System.currentTimeMillis()
+    val current = remember(birthNakshatra) { NakshatraGuidanceCalculator.currentGuidance(birthNakshatra, now) }
+    val upcoming = remember(birthNakshatra) { NakshatraGuidanceCalculator.upcomingGuidance(birthNakshatra, 60, now) }
+    val warning = Color(0xFFE53935)
+    val bg = Color(0xFF07111F)
+    val card = Color(0xFF10253A)
+    val white = Color(0xFFF5F7FA)
+
+    Column(Modifier.fillMaxSize().background(bg).statusBarsPadding().navigationBarsPadding().verticalScroll(rememberScrollState()).padding(12.dp)) {
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            TextButton(onClick = onBack) { Text("← मागे", color = white) }
+            Text("नक्षत्र मार्गदर्शन", color = white, fontSize = 21.sp, fontWeight = FontWeight.Bold)
+        }
+
+        Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = card), shape = RoundedCornerShape(14.dp)) {
+            Column(Modifier.padding(14.dp)) {
+                Text("जन्म नक्षत्र", color = Color.LightGray, fontSize = 13.sp)
+                Text(if (birthNakshatra.isBlank()) "—" else birthNakshatra, color = Color(0xFF4DA3FF), fontSize = 23.sp, fontWeight = FontWeight.Bold)
+            }
+        }
+        Spacer(Modifier.height(10.dp))
+
+        Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = card), shape = RoundedCornerShape(14.dp)) {
+            Column(Modifier.padding(14.dp)) {
+                Text("🌙 सध्या चालू असलेले नक्षत्र", color = white, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+                Text(current.nakshatra, color = if (current.tara.isWarning) warning else white, fontSize = 22.sp, fontWeight = FontWeight.Bold)
+                Text("तारा: ${current.tara.marathi}", color = if (current.tara.isWarning) warning else Color(0xFFFFC83D), fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text("सुरुवात: ${NakshatraGuidanceCalculator.format(current.startMillis)}", color = Color.LightGray, fontSize = 12.sp)
+                Text("समाप्ती: ${NakshatraGuidanceCalculator.format(current.endMillis)}", color = Color.LightGray, fontSize = 12.sp)
+                Spacer(Modifier.height(8.dp))
+                Text("काय करावे", color = white, fontWeight = FontWeight.Bold)
+                Text(current.doText, color = Color(0xFFB9E6FF), fontSize = 13.sp)
+                Spacer(Modifier.height(6.dp))
+                Text("काय टाळावे", color = white, fontWeight = FontWeight.Bold)
+                Text(current.avoidText, color = if (current.tara.isWarning) warning else Color(0xFFFFC0C0), fontSize = 13.sp, fontWeight = if (current.tara.isWarning) FontWeight.Bold else FontWeight.Normal)
+            }
+        }
+
+        Spacer(Modifier.height(14.dp))
+        Text("📅 पुढील 60 दिवसांचे नक्षत्र", color = white, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+        Spacer(Modifier.height(6.dp))
+        upcoming.forEach { item ->
+            Card(Modifier.fillMaxWidth().padding(vertical = 3.dp), colors = CardDefaults.cardColors(containerColor = card), shape = RoundedCornerShape(10.dp)) {
+                Column(Modifier.padding(11.dp)) {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        Text(item.nakshatra, color = if (item.tara.isWarning) warning else white, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                        Text(item.tara.marathi + if (item.tara.isWarning) " 🔴" else "", color = if (item.tara.isWarning) warning else Color(0xFFFFC83D), fontWeight = FontWeight.Bold)
+                    }
+                    Text("${NakshatraGuidanceCalculator.format(item.startMillis)}  →  ${NakshatraGuidanceCalculator.format(item.endMillis)}", color = Color.LightGray, fontSize = 11.sp)
+                }
+            }
+        }
+
+        Spacer(Modifier.height(14.dp))
+        Text("🔴 विपत / प्रत्यारी / वध — आगामी", color = warning, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+        upcoming.filter { it.tara.isWarning }.forEach { item ->
+            Card(Modifier.fillMaxWidth().padding(vertical = 3.dp), colors = CardDefaults.cardColors(containerColor = Color(0xFF35151A)), shape = RoundedCornerShape(10.dp)) {
+                Column(Modifier.padding(11.dp)) {
+                    Text("${item.tara.marathi} — ${item.nakshatra}", color = warning, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    Text("${NakshatraGuidanceCalculator.format(item.startMillis)}  →  ${NakshatraGuidanceCalculator.format(item.endMillis)}", color = white, fontSize = 12.sp)
+                    Spacer(Modifier.height(4.dp))
+                    Text("काय टाळावे: ${item.avoidText}", color = warning, fontSize = 12.sp)
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun UpcomingBadTaraScreen(
     birthNakshatra: String,
     onBack: () -> Unit
