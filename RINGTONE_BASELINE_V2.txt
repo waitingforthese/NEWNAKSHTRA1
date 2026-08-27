@@ -1,0 +1,18 @@
+LIFE ALARM — ALL RINGTONES V2
+
+BASELINE: LifeAlarm_PANCHANG_RINGTONES_V1
+
+Moon + Sun:
+Rashi      -> rashi.mp3
+Nakshatra  -> nakshatra.mp3
+Charan     -> charan.mp3
+
+Panchang:
+Tithi      -> tithi_badal.mp3
+Yoga       -> yog_badal.mp3
+Karana     -> karan_badal.mp3
+Paksha     -> paksh_badal.mp3
+Prahar     -> prahar_badal.mp3
+Lagna      -> lagn_badal.mp3
+
+No calculation, location, refresh, or alarm timing logic was intentionally changed.

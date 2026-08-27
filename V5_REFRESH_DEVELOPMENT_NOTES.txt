@@ -1,0 +1,13 @@
+LIFE ALARM - V5 REFRESH DEVELOPMENT
+
+Based on successful V4 baseline.
+
+Changes:
+1. Automatic Panchang/Moon/Sun UI refresh every 5 minutes while the app is open.
+2. Manual "↻ Refresh" button added to the home screen.
+3. Refresh runs the same fresh background calculation path and updates the local cache.
+4. Last refresh time is shown on screen.
+5. Existing startup cache remains intact; cached data still renders immediately.
+6. Existing live location, Prahar, Lagna, alarm engine and settings behavior preserved.
+7. Footer added: "Developed by Rahul Jagtap Patil".
+8. Version bumped to 2.8 / versionCode 8.

@@ -1,0 +1,17 @@
+MOBILE BUILD — NO PC
+
+1. Create a GitHub account if you do not already have one.
+2. Create a NEW repository named ChandraPanchangAlarm.
+3. Upload the contents of this ZIP into the repository (not the ZIP itself).
+4. Open the repository -> Actions.
+5. Select "Build APK".
+6. Tap "Run workflow".
+7. Wait for the build to finish.
+8. Open the completed workflow run.
+9. Under Artifacts, download "ChandraPanchangAlarm-debug".
+10. Extract the artifact ZIP and install app-debug.apk on the Android phone.
+
+Important:
+- This is a V1 UI/Test Alarm prototype.
+- The real astronomical calculation engine is NOT included yet.
+- The supplied Daund 17-Aug-2026 4:19 PM value is a validation reference, not hard-coded production astronomy.

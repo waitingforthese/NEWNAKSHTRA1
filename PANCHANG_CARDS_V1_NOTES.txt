@@ -1,0 +1,9 @@
+BASELINE:
+LifeAlarm_PANCHANG_TEST_SOUND_FIXED_V2 / uploaded finalwithsound-main
+
+UI changes:
+1. Added separate दिनांक card.
+2. Added separate वार card.
+3. Added नक्षत्र card immediately after तिथी card.
+4. Nakshatra card uses existing MoonState current nakshatra and next nakshatra/time.
+5. Existing ringtone, alarm, location, refresh and calculation logic unchanged.

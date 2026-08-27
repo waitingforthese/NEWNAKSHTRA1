@@ -1,0 +1,15 @@
+LOGIN INPUT FIX V1
+
+Baseline: nakshtrastarttme-main_GhatChakra_Login_Yog_Paksha_BackgroundPermission_V2.zip
+
+Changes:
+1. Birth Login screen input text is explicitly white on the dark background so typed values are visible.
+2. Birth date accepts numeric input and automatically formats it as DD/MM/YYYY.
+   Example: 03081987 -> 03/08/1987.
+3. Birth time accepts numeric input and automatically formats it as HH:MM in 24-hour format.
+   Example: 0100 -> 01:00; 1345 -> 13:45.
+4. Birth time placeholder is 00:00 and validation accepts 00:00 through 23:59.
+5. Existing AM/PM values remain backward-compatible inside the calculator for previously stored/manual data.
+6. Birth date/time validation remains strict before login/ghat-chakra generation.
+
+This is a source baseline ZIP. Android SDK/Gradle wrapper is not included in the supplied project, so APK compilation cannot be claimed in this environment.

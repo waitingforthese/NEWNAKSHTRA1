@@ -1,0 +1,14 @@
+BASELINE — LIFE ALARM
+
+This project is the baseline for further development.
+
+App display name: Life Alarm
+
+App logo:
+The supplied "logo life.jfif" artwork is used as the application logo/icon
+and is stored as app/src/main/res/drawable/logo.png.
+
+Do not replace the logo or app name in future changes unless explicitly requested.
+
+Current baseline source is otherwise preserved from:
+ChandraPanchangAlarm_ALARM_TEST_V2(1).zip

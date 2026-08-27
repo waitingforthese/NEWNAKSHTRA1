@@ -1,0 +1,12 @@
+LifeAlarm STARTUP FAST V3
+Base: LifeAlarm_POLISHED_V1 / Alarm Engine V1.
+
+- Moon/Sun next-event searches use coarse stepping + binary refinement and reuse SwissEph per search.
+- Panchang boundary scans use 6-hour coarse steps with binary refinement.
+- Lagna boundary scan uses 15-minute coarse steps with binary refinement.
+- MainActivity uses one lifecycle-safe LaunchedEffect(Unit) and snapshotFlow for location recalculation, avoiding repeated cancellation/restart of long calculations.
+- GPS jitter threshold is 0.01 degree.
+- Cached live location is used before Pune fallback.
+- Next Alarm card and existing alarm/location functionality are preserved.
+- Masa remains removed/disabled.
+- versionCode 6 / versionName 2.6.

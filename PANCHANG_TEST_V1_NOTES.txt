@@ -1,0 +1,10 @@
+BASELINE: LifeAlarm_ALL_RINGTONES_V2_FIXED
+
+Changes:
+1. Existing Rashi/Nakshatra/Charan test alarms now use their actual app ringtones.
+2. Added '📅 पंचांग Ringtone Test' button.
+3. Panchang test schedules six test notifications sequentially:
+   Tithi -> Yoga -> Karana -> Paksha -> Prahar -> Lagna.
+   Interval: 5 seconds; first test fires about 2 seconds after button press.
+4. Panchang test IDs 201..206 are non-persistent test IDs and are cancelled by cancelAll().
+5. Existing real alarm IDs and calculation logic are unchanged.

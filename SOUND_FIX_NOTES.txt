@@ -1,0 +1,15 @@
+LifeAlarm_PANCHANG_TEST_V1 sound fix.
+
+Root cause:
+AlarmScheduler.schedule() was not placing soundResource into the Broadcast
+Intent. AlarmReceiver therefore fell back to the default "alarm" resource,
+so vibration/notification worked but the requested ringtone did not play.
+
+Fix:
+1. Added soundResource Intent extra whenever a ringtone is specified.
+2. Notification channel version changed from v1 to v2 so Android 8+ devices
+   receive a fresh channel with the requested sound; existing v1 channel
+   settings cannot be changed programmatically.
+3. Added .setSound(soundUri) for pre-Android-8 notifications.
+4. Verified all 9 MP3 assets have an MP3 ID3 header or MPEG frame sync.
+5. No calculation, alarm timing, location, refresh, or UI logic changed.

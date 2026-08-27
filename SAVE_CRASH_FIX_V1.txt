@@ -1,0 +1,11 @@
+SAVE CRASH FIX V1
+
+Settings Save no longer executes the heavy astronomical scheduler on the
+Compose UI thread.
+
+The scheduler is started on a background thread and protected by a top-level
+exception guard. AlarmManager SecurityException is also caught with an
+inexact-alarm fallback.
+
+Masa alarm scheduling is removed because Masa is not part of the current UI.
+Existing switch persistence is unchanged.

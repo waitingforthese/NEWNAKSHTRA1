@@ -1,0 +1,8 @@
+Baseline: LifeAlarm_PERMISSIONS_CARDS_V2
+
+Fix:
+- Added actual current Moon Nakshatra start-time calculation.
+- Uses backward Swiss Ephemeris search with 2-hour scan + binary search.
+- Nakshatra card now displays the calculated start time.
+- Cache stores nakshatraStartTime and remains backward-compatible with older cache.
+- No alarm/ringtone/location/permission logic changed.

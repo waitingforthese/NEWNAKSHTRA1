@@ -1,0 +1,28 @@
+LIFE ALARM - BASELINE V2
+
+हा V2 baseline, LifeAlarm_SAVE_CRASH_FIXED_V1 वर आधारित आहे.
+
+या आवृत्तीत झालेले बदल:
+
+1) AlarmReceiver मधील पुढील alarm चे calculation आता थेट receiver thread वर
+   होत नाही. goAsync() + background thread वापरला आहे.
+
+2) त्यामुळे alarm वाजल्यानंतर पुन्हा scheduleAll() करताना UI/receiver
+   अडकणे किंवा crash होण्याचा धोका कमी केला आहे.
+
+3) फोन restart झाल्यावर किंवा app update झाल्यावर BootReceiver मधील
+   scheduleAll() सुद्धा background thread वर चालते.
+
+4) कोणताही scheduler exception app बंद करू नये म्हणून error logging ठेवले आहे.
+
+5) आधीची working Save Settings fix कायम ठेवली आहे.
+
+6) Alarm IDs आणि सध्याचे 12 alarm-setting logic बदललेले नाही.
+   त्यामुळे working functionality जशी आहे तशीच ठेवली आहे.
+
+पुढील काम:
+- 12 alarm events चे actual timing verification
+- alarm notification + sound + vibration verification
+- duplicate alarm verification
+- reboot verification
+- ON/OFF setting verification

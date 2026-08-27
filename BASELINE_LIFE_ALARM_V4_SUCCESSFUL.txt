@@ -1,0 +1,10 @@
+LIFE ALARM - BASELINE V4
+
+Baseline status: SUCCESSFUL
+Baseline archive: LifeAlarm_STARTUP_FAST_V4.zip
+Version: 2.7 (versionCode 7)
+
+This baseline preserves the verified V4 startup-cache implementation and all
+previous working alarm/location functionality. Future work must branch from
+this baseline and must not remove existing working behavior unless explicitly
+requested.

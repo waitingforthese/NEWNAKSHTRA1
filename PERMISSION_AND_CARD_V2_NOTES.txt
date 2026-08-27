@@ -1,0 +1,13 @@
+BASELINE: LifeAlarm_PANCHANG_CARDS_V1
+
+Changes:
+1. दिनांक and वार are now compact separate value cards; no प्रारंभ / पुढील बदल / बदलाची वेळ.
+2. नक्षत्र remains immediately after तिथी.
+3. नक्षत्र card keeps the existing current/next/change-time fields. Its current
+   start time is not available in MoonState, so it remains "—" rather than
+   inventing a value.
+4. First-launch runtime permission flow is sequential:
+   Notification permission first (Android 13+), then location permission after
+   the notification dialog completes. On older Android, location is requested.
+5. Manifest already contains POST_NOTIFICATIONS and location permissions.
+6. Existing alarm, ringtone, calculation, location and refresh logic unchanged.

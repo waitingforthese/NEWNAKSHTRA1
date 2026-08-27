@@ -1,0 +1,18 @@
+LIFE ALARM - ALARM ENGINE V1
+
+Baseline: LifeAlarm_TEST7_BASELINE.zip
+Version: 2.5 / versionCode 5
+
+Changes:
+1. Stable IDs are reconciled individually; scheduleAll() no longer cancels every alarm on every GPS/UI refresh.
+2. Repeated scheduleAll() calls with the same exact event are ignored.
+3. Each scheduled alarm carries its exact eventAt timestamp.
+4. AlarmReceiver ignores duplicate delivery of the same event timestamp, preventing duplicate sound/vibration.
+5. Real alarms are never scheduled in the past.
+6. Prahar and Lagna continue using LocationPrefs latitude/longitude for location-specific calculation.
+7. Boot/package replacement continues to restore alarms through BootReceiver.
+8. Existing 12 alarm categories and test alarms are preserved.
+9. Exact-alarm Settings is no longer launched from a background receiver thread.
+
+Build note:
+This source was statically checked in this environment; Android Gradle executable was not available locally, so a local Gradle compile could not be performed here.

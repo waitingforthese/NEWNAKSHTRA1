@@ -1,0 +1,47 @@
+LIFE ALARM — LOCATION + 12 ALARMS V2
+
+मराठी बदल नोंद:
+
+1) 12 actual alarm events साठी प्रत्येकाला स्थिर unique ID आहे.
+   त्यामुळे एकाच event चे duplicate PendingIntent/alarm तयार होऊ नयेत
+   म्हणून schedule करण्यापूर्वी त्याच ID चा जुना alarm cancel केला जातो.
+
+2) आधीचा scheduleAll() सुरू करण्यापूर्वी cancelAll() कायम आहे.
+   त्यामुळे Settings Save, location बदल किंवा alarm trigger नंतर
+   जुने scheduled alarms हटवून फक्त पुढचे 12 आवश्यक alarms ठेवले जातात.
+
+3) आधीच निघून गेलेली वेळ schedule केली जाणार नाही.
+   अशा वेळी किमान 2 सेकंद पुढची सुरक्षित वेळ वापरली जाते.
+
+4) Live GPS latitude/longitude SharedPreferences मध्ये साठवले जाते.
+   AlarmScheduler आता हाच latest location वापरतो.
+
+5) Prahar calculation आता Pune hard-coded coordinates वापरत नाही.
+   त्याऐवजी LIVE GPS latitude/longitude वापरतो.
+
+6) Lagna calculation आता Pune hard-coded coordinates वापरत नाही.
+   Swiss Ephemeris houses/ascendant calculation साठी LIVE GPS coordinates
+   वापरले जातात.
+
+7) Home screen वर live location मिळाल्यावर Panchang पुन्हा calculate होतो.
+   त्यामुळे प्रहर आणि लग्नाची वेळ त्या location नुसार बदलते.
+
+8) Location साधारण 0.001 degree पेक्षा जास्त बदलल्यास selected live alarms
+   background मध्ये पुन्हा schedule केले जातात.
+
+9) Tithi/Yoga/Karana/Paksha सारख्या geocentric astronomical events साठी
+   longitude/latitude ची गरज नसते; त्यांचे Swiss Ephemeris calculation
+   पूर्वीप्रमाणेच राहिले आहे.
+
+10) Masa calculation/UI मध्ये पुन्हा enable केलेले नाही.
+
+आता एकत्र test करायचे:
+- Settings Save
+- 12 alarm switches
+- Live GPS
+- location बदलल्यावर Prahar/Lagna बदल
+- actual next-event times
+- notification + sound + vibration
+- duplicate alarms नसणे
+- alarm वाजल्यानंतर पुढचा alarm पुन्हा schedule होणे
+- phone restart नंतर alarms restore होणे

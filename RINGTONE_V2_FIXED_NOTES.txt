@@ -1,0 +1,3 @@
+LifeAlarm_ALL_RINGTONES_V2 FIXED
+Fixed missing commas and completed Moon/Sun/Panchang ringtone mapping.
+No calculation/location/refresh/timing logic changed.

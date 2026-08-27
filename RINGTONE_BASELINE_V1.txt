@@ -1,0 +1,19 @@
+LIFE ALARM — RINGTONE V1
+
+हा version LifeAlarm_STARTUP_REFRESH_V5 वर आधारित आहे.
+
+Panchang मधील सहा cards साठी वेगवेगळे user-provided MP3 वापरले आहेत:
+- तिथी → tithi_badal.mp3
+- योग → yog_badal.mp3
+- करण → karan_badal.mp3
+- पक्ष → paksh_badal.mp3
+- प्रहर → prahar_badal.mp3
+- लग्न → lagn_badal.mp3
+
+Android 8+ notification channels साठी प्रत्येक ringtone ला स्वतंत्र
+stable channel दिला आहे. त्यामुळे channel आधी तयार झाला असला तरी दुसऱ्या
+ringtone मध्ये sound मिसळणार नाही.
+
+Moon/Sun alarms आणि test alarms साठी existing default alarm sound कायम आहे.
+Existing alarm IDs, duplicate protection, live location आणि calculation logic
+बदललेली नाही.

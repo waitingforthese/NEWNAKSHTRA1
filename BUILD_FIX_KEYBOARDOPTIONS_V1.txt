@@ -1,0 +1,14 @@
+BUILD FIX V1
+
+Fixed MainActivity.kt unresolved reference: KeyboardOptions.
+
+Changed the import from:
+androidx.compose.ui.text.input.KeyboardOptions
+
+to:
+androidx.compose.foundation.text.KeyboardOptions
+
+KeyboardType remains:
+androidx.compose.ui.text.input.KeyboardType
+
+No other feature/design code was intentionally changed in this fix.

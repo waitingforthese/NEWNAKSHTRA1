@@ -1,0 +1,27 @@
+BASELINE V5 CHANGELOG
+
+Base: V4 KeyboardOptionsFix (kept as baseline).
+
+1. Ghat Chakra yoga table corrected to the Date Panchang reference used for Maharashtra:
+   Mesha Vishkumbha; Vrishabha Shukla; Mithuna Parigha; Karka Vyaghata;
+   Simha Dhriti; Kanya Shukla; Tula Shukla; Vrishchika Vyatipata;
+   Dhanu Vajra; Makara Vaidhriti; Kumbha Ganda; Meena Vajra.
+
+2. Birth date input: DD/MM/YYYY auto-format, with live validation once complete.
+   Invalid calendar dates are rejected.
+
+3. Birth time input: 00:00 24-hour format, auto-format from digits, with live validation
+   for 00:00-23:59.
+
+4. Startup notification/location/background/battery-optimization permission flow is requested
+   only once after installation and persisted in SharedPreferences. Reopening the app does not
+   launch the permission flow again. Permissions can still be changed manually in Android Settings.
+
+5. Version bumped to 2.9 / versionCode 9 for the updated baseline.
+
+
+YOGA RULE FINALIZATION
+- Ghat-Chakra Yoga comparison uses the app's existing Surya Siddhanta Panchang Yoga.
+- Surya Siddhanta Yoga = normalized(sidereal Sun longitude + sidereal Moon longitude) / 13°20′, mapped to the 27 Panchang Yogas.
+- No separate/alternate Yoga calculation is used for Ghat-Chakra.
+- Panchang UI labels this value as “योग (सूर्यसिद्धांत)”.

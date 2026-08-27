@@ -1,0 +1,13 @@
+LIVE LOCATION V1
+
+मराठी बदल नोंद:
+
+1) फोनची GPS/Fused Location वापरून सध्याचे Latitude आणि Longitude मिळवले.
+2) स्थान मिळाल्यावर Home screen वर 📍 Latitude, Longitude दाखवले जातात.
+3) Location updates साधारण प्रत्येक 60 सेकंदांनी घेतले जातात.
+4) App बंद/Screen dispose झाल्यावर location updates थांबवले जातात.
+5) Location permission नसेल तर स्पष्ट संदेश दाखवला जातो.
+6) सध्याची Panchang/Moon/Sun calculation logic बदललेली नाही.
+   म्हणजे या V1 मध्ये location फक्त LIVE LOCATION म्हणून UI मध्ये जोडले आहे.
+   पुढच्या टप्प्यात याच latitude/longitude चा वापर करून सूर्योदय, सूर्यास्त,
+   लग्न आणि स्थानिक पंचांग वेळा location-specific करता येतील.

@@ -1,0 +1,15 @@
+LIFE ALARM — STARTUP CACHE V4
+
+Base: LifeAlarm_STARTUP_FAST_V3_FIXED
+
+Change:
+- Last successfully calculated Moon/Sun/Panchang state is cached locally.
+- On the next app launch the cached state is rendered immediately instead of
+  waiting for the Swiss Ephemeris calculation to finish.
+- A fresh calculation still runs in the background and replaces the cache.
+- Cache failures are ignored so they can never crash or block the app.
+- The cache is display-only; alarm scheduling continues to use fresh calculation.
+- Existing location-specific Prahar/Lagna, alarm engine, duplicate control,
+  settings and Masa removal are unchanged.
+
+Version: 2.7 / versionCode 7
