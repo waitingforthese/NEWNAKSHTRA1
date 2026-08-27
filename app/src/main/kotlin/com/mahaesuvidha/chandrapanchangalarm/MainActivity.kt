@@ -2420,7 +2420,7 @@ private fun NakshatraGuidanceScreen(
         }
     }
 }
-\n@Composable
+@Composable
 private fun UpcomingBadTaraScreen(
     birthNakshatra: String,
     onBack: () -> Unit
